@@ -11,7 +11,7 @@ set(groot, 'DefaultLegendFontSize', 14);
 
 c = 3*10^8; %speed of light (m/s)
 
-r = 98;%98;%108;% nm
+r = 90;%98;%108;% nm
 a = 390;% nm
 
 X_dat_file = strcat('legume-data/X_a',string(a),'_r',string(r),'.dat');
@@ -113,8 +113,8 @@ hold on;
 xmin = 0;
 xmax = 1;
 
-yLow  = 188.827692307692;   % lower Y boundary
-yHigh = 211.546153846154;   % upper Y boundary
+yLow  = 189.019230769231;   % lower Y boundary
+yHigh = 205.453846153846;   % upper Y boundary
 
 patch([xmin xmax xmax xmin], ...
       [yLow yLow yHigh yHigh], ...
@@ -158,7 +158,7 @@ xticklabels({'G', 'M', 'K', 'G'});
 h = yline(193.3,'-', '193.3 THz = 1550 nm');
 h.HandleVisibility = 'off';
 h.LabelHorizontalAlignment = 'center';
-h.FontSize = 16;
+h.FontSize = 12;
 
 xlabel("Wavevector");
 ylabel("THz");
