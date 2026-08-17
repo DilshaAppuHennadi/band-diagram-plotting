@@ -1,0 +1,139 @@
+%% Open and Plot All Data for a Single Crystal Type
+%
+%
+
+clear all
+close all
+
+set(groot, 'DefaultAxesFontSize', 16);
+set(groot, 'DefaultTextFontSize', 18);
+set(groot, 'DefaultLegendFontSize', 14);
+
+c = 3*10^8; %speed of light (m/s)
+
+r = 98;%108;% nm
+a = 390;% nm
+
+X_dat_file = strcat('legume-data/X_a',string(a),'_r',string(r),'.dat');
+even_dat_file = strcat('legume-data/evenF_a',string(a),'_r',string(r),'.dat');
+odd_dat_file = strcat('legume-data/oddF_a',string(a),'_r',string(r),'.dat');
+LL_dat_file = strcat('legume-data/LL_a',string(a),'_r',string(r),'.dat');
+
+% Load PhC data files------------------------------------------------------
+if ~isfile(X_dat_file)
+    error('openMyFile:FileNotFound', ...
+        'File does not exist: %s', X_dat_file);
+end
+
+X = importdata(X_dat_file); % K-space vectors
+
+if ~isfile(even_dat_file)
+    error('openMyFile:FileNotFound', ...
+        'File does not exist: %s', even_dat_file);
+end
+
+evenF = importdata(even_dat_file); % TE-like bands
+
+if ~isfile(odd_dat_file)
+    error('openMyFile:FileNotFound', ...
+        'File does not exist: %s', odd_dat_file);
+end
+
+oddF = importdata(odd_dat_file); % TM-like bands
+
+if ~isfile(LL_dat_file)
+    error('openMyFile:FileNotFound', ...
+        'File does not exist: %s', LL_dat_file);
+end
+
+LL = importdata(LL_dat_file); % TM-like bands
+figure
+plot(X(:,1),LL)
+
+% Plot Band Diagram from Legume--------------------------------------------
+
+figure
+hold on;
+
+xmin = 0;
+xmax = 1;
+
+yLow  = 0.245109000000000;   % lower Y boundary
+yHigh = 0.275010000000000;   % upper Y boundary
+
+patch([xmin xmax xmax xmin], ...
+      [yLow yLow yHigh yHigh], ...
+      [0.8 0.8 0.9], ...      % light color
+      'FaceAlpha', 0.3, ...   % transparency
+      'EdgeColor', 'none');   % no border
+
+c1 = [0 0.4470 0.7410];   % color for TE (blue)
+c2 = [0.8500 0.3250 0.0980];   % color for TM (orange)
+
+for i = 1:20
+    scatter(X(:,i), evenF(:,i), 20, c1, 'filled');
+    scatter(X(:,i), oddF(:,i), 20, c2, 'filled');
+end
+
+% Create representative handles for the legend
+hY1 = scatter(NaN, NaN, 20, c1, 'filled');
+hY2 = scatter(NaN, NaN, 20, c2, 'filled');
+
+legend([hY1 hY2], {"TE-like modes", "TM-like modes"}, 'Location', 'south');
+
+xticks([0 0.366025000000000 0.587917000000000 1]);
+xticklabels({'G', 'M', 'K', 'G'});
+
+xlabel("Wavevector");
+ylabel("\omega a/2 \pi c");
+title("Band diagram a = " + a + " nm, r = " + r + " nm");
+grid on;
+hold off;
+
+% Band Diagram in Hz-------------------------------------------------------
+
+evenF_Hz = evenF .* (c/(a*10^-9)) .* 10^-12; % THz
+oddF_Hz = oddF .* (c/(a*10^-9)) .* 10^-12; % THz
+
+figure
+hold on;
+
+% Draw a box indicating the Photonic Band Gap
+xmin = 0;
+xmax = 1;
+
+yLow  = 188.545384615385;   % lower Y boundary
+yHigh = 211.546153846154;   % upper Y boundary
+
+patch([xmin xmax xmax xmin], ...
+      [yLow yLow yHigh yHigh], ...
+      [0.8 0.8 0.9], ...      % light color
+      'FaceAlpha', 0.3, ...   % transparency
+      'EdgeColor', 'none');   % no border
+
+% Shade in the area above the Lightline
+patch(X(:,1), LL, [0.8 0.8 0.9],)
+
+c1 = [0 0.4470 0.7410];   % color for TE (blue)
+c2 = [0.8500 0.3250 0.0980];   % color for TM (orange)
+
+for i = 1:20
+    scatter(X(:,i), evenF_Hz(:,i), 20, c1, 'filled');
+    scatter(X(:,i), oddF_Hz(:,i), 20, c2, 'filled');
+end
+
+% Create representative handles for the legend
+hY1 = scatter(NaN, NaN, 20, c1, 'filled');
+hY2 = scatter(NaN, NaN, 20, c2, 'filled');
+
+legend([hY1 hY2], {"TE-like modes", "TM-like modes"}, 'Location', 'south');
+
+xticks([0 0.366025000000000 0.587917000000000 1]);
+xticklabels({'G', 'M', 'K', 'G'});
+
+yline(193.3,'-','193.3 THz = 1550 nm', 'HandleVisibility','off')
+xlabel("Wavevector");
+ylabel("THz");
+title("Band diagram a = " + a + " nm, r = " + r + " nm");
+grid on;
+hold off;
