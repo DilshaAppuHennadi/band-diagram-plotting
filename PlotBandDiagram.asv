@@ -12,7 +12,7 @@ set(groot, 'DefaultLegendFontSize', 14);
 c = 3*10^8; %speed of light (m/s)
 
 r = 77;%98;%108;% nm
-a = 368;% nm
+a = 370;% nm
 
 X_dat_file = strcat('legume-data/X_a',string(a),'_r',string(r),'.dat');
 even_dat_file = strcat('legume-data/evenF_a',string(a),'_r',string(r),'.dat');
@@ -113,8 +113,8 @@ hold on;
 xmin = 0;
 xmax = 1;
 
-yLow  = 196.434782608696;   % lower Y boundary
-yHigh = 207.233152173913;   % upper Y boundary
+yLow  = 195.608108108108;   % lower Y boundary
+yHigh = 206.415405405405;   % upper Y boundary
 
 patch([xmin xmax xmax xmin], ...
       [yLow yLow yHigh yHigh], ...
@@ -158,13 +158,12 @@ xticklabels({'G', 'M', 'K', 'G'});
 h = yline(193.3,'-', '193.3 THz = 1550 nm');
 h.HandleVisibility = 'off';
 h.LabelHorizontalAlignment = 'center';
-h.LabelVerticalAlignment = 'bottom';
+h.LabelHorizontalAlignment = 'center';
 h.FontSize = 12;
 
 h = yline(196.6,'-', '196.6 THz = 1525 nm');
 h.HandleVisibility = 'off';
 h.LabelHorizontalAlignment = 'center';
-h.LabelVerticalAlignment = 'top';
 h.FontSize = 12;
 
 xlabel("Wavevector");
